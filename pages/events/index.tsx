@@ -21,24 +21,24 @@ interface Props {
 export default function AllEventsPage({ dataStat }: Props) {
   // console.log("🚀 ~ file: index.tsx:21 ~ AllEventsPage ~ dataStat", dataStat)
 
-  function transformToArray(data) {
-    const eventsStat = []
+  function transformToArray(dat) {
+    const eventsArr = []
 
-    for (const key in data) {
-      console.log('🚀', data)
-       eventsStat.push({
-        id: key,
-        date: data[key].date,
-        location: data[key].location,
-        description: data[key].description,
-        image: data[key].image,
-        title: data[key].title,
-        isFeatured: data[key].isFeatured,
-       })
-      return eventsStat
-    }
+      for (const key in dat)
+        eventsArr.push({
+          id: key,
+          date: dat[key].date,
+          location: dat[key].location,
+          description: dat[key].description,
+          image: dat[key].image,
+          title: dat[key].title,
+          isFeatured: dat[key].isFeatured,
+        })
+      return eventsArr
+
   }
-  const eventsStat = transformToArray(dataStat) ;
+  const eventsStat = transformToArray(dataStat)
+  console.log("🚀 ~ file: index.tsx:41 ~ AllEventsPage ~ eventsStat", eventsStat)
 
   const [eventsFetched, setEventsFetched] = useState<Event[]>(eventsStat)
   const fetcher = (url: string) => fetch(url).then((r) => r.json())
@@ -81,3 +81,5 @@ export async function getStaticProps() {
     // revalidate: 2,
   }
 }
+
+// 'https://nextjs-course-88039-default-rtdb.europe-west1.firebasedatabase.app/events.json'

@@ -9,7 +9,7 @@ interface IEventList {
 }
 
 export default function EventList({ items }: IEventList) {
-  if (items.length === 0) {
+  if (!items || items.length === 0) {
     return (
       <>
         <ErrorAlert>No events found.</ErrorAlert>
