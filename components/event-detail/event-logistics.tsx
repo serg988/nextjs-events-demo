@@ -21,7 +21,7 @@ function EventLogistics({ date, address, image, imageAlt }: IEventLogistics) {
   return (
     <section className={classes.logistics}>
       <div className={classes.image}>
-        <img src={`/${image}`} alt={imageAlt} />
+        <img src={image} alt={imageAlt} />
       </div>
       <ul className={classes.list}>
         <LogisticsItem icon={DateIcon}>

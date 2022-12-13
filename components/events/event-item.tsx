@@ -1,4 +1,4 @@
-import { EventDummy } from '../../dummy-data'
+import { Event } from '../../pages/events'
 import AddressIcon from '../icons/address-icon'
 import ArrowRightIcon from '../icons/arrow-right-icon'
 import DateIcon from '../icons/date-icon'
@@ -7,7 +7,7 @@ import Button from '../ui/button'
 import classes from './event-item.module.css'
 
 interface IEventItem {
-  event: EventDummy
+  event: Event
 }
 
 export default function EventItem({ event }: IEventItem) {
