@@ -50,6 +50,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
+import Head from 'next/head'
 
 import EventList from '../../components/events/event-list'
 import ResultsTitle from '../../components/events/results-title'
@@ -62,11 +63,9 @@ export default function FilteredEventsPage() {
   const [loadedEvents, setLoadedEvents] = useState<Event[]>()
   const router = useRouter()
 
-  const filterData = router.query.slug
-
-  const fetcher = (url: string) => fetch(url).then((r) => r.json())
+  // const fetcher = (url: string) => fetch(url).then((r) => r.json())
   const { data, error, isLoading } = useSWR(
-    'https://nextjs-course-88039-default-rtdb.europe-west1.firebasedatabase.app/events.json', fetcher
+    'https://nextjs-course-88039-default-rtdb.europe-west1.firebasedatabase.app/events.json'
   )
 
   useEffect(() => {
@@ -87,62 +86,73 @@ export default function FilteredEventsPage() {
   if (isLoading) {
     return <p className='center'>Loading...</p>
   }
-  
-  const filteredYear = filterData[0]
-  const filteredMonth = filterData[1]
+  const filterData = router.query.slug
+  console.log("🚀 ~ file: [...slug].tsx:89 ~ FilteredEventsPage ~ filterData", filterData)
+  if (filterData) {
+    const numYear = +filterData[0]
+    const numMonth = +filterData[1]
 
-  const numYear = +filteredYear
-  const numMonth = +filteredMonth
+    if (
+      isNaN(numYear) ||
+      isNaN(numMonth) ||
+      numYear > 2030 ||
+      numYear < 2021 ||
+      numMonth < 1 ||
+      numMonth > 12 ||
+      error
+    ) {
+      return (
+        <>
+          <Head>
+            <title>No events found</title>
+            <meta name='description' content='Find a lot here' />
+          </Head>
+          <ErrorAlert>
+            <p>Invalid filter. Please adjust your values!</p>
+          </ErrorAlert>
+          <div className='center'>
+            <Button link='/events'>Show All Events</Button>
+          </div>
+        </>
+      )
+    }
 
-  if (
-    isNaN(numYear) ||
-    isNaN(numMonth) ||
-    numYear > 2030 ||
-    numYear < 2021 ||
-    numMonth < 1 ||
-    numMonth > 12 ||
-    error
-  ) {
+    const filteredEvents = loadedEvents?.filter((event) => {
+      const eventDate = new Date(event.date)
+      return (
+        eventDate.getFullYear() === numYear &&
+        eventDate.getMonth() === numMonth - 1
+      )
+    })
+
+    if (!filteredEvents || filteredEvents.length === 0) {
+      return (
+        <>
+          <Head>
+            <title>No events found</title>
+            <meta name='description' content='Find a lot here' />
+          </Head>
+          <ErrorAlert>
+            <p>No events found for the chosen filter!</p>
+          </ErrorAlert>
+          <div className='center'>
+            <Button link='/events'>Show All Events</Button>
+          </div>
+        </>
+      )
+    }
+
+    const date = new Date(numYear, numMonth - 1)
+
     return (
       <>
-        <ErrorAlert>
-          <p>Invalid filter. Please adjust your values!</p>
-        </ErrorAlert>
-        <div className='center'>
-          <Button link='/events'>Show All Events</Button>
-        </div>
+        <Head>
+          <title>Filtered Events</title>
+          <meta name='description' content='Find a lot here' />
+        </Head>
+        <ResultsTitle date={date} />
+        <EventList items={filteredEvents} />
       </>
     )
   }
-
-  const filteredEvents = loadedEvents?.filter((event) => {
-    const eventDate = new Date(event.date)
-    return (
-      eventDate.getFullYear() === numYear &&
-      eventDate.getMonth() === numMonth - 1
-    )
-  })
-
-  if (!filteredEvents || filteredEvents.length === 0) {
-    return (
-      <>
-        <ErrorAlert>
-          <p>No events found for the chosen filter!</p>
-        </ErrorAlert>
-        <div className='center'>
-          <Button link='/events'>Show All Events</Button>
-        </div>
-      </>
-    )
-  }
-
-  const date = new Date(numYear, numMonth - 1)
-
-  return (
-    <>
-      <ResultsTitle date={date} />
-      <EventList items={filteredEvents} />
-    </>
-  )
 }
-

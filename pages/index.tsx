@@ -1,3 +1,5 @@
+import Head from 'next/head'
+
 import EventList from '../components/events/event-list'
 import { getFeaturedEvents } from '../helpers/api-util'
 
@@ -10,6 +12,10 @@ type Props = {
 export default function HomePage({ data }: Props) {
   return (
     <div>
+      <Head>
+        <title>NextJS Events</title>
+        <meta name='description' content='Find a lot here'/>
+      </Head>
       <EventList items={data} />
     </div>
   )
@@ -21,7 +27,6 @@ export async function getServerSideProps() {
   if (!data) {
     return {
       notFound: true,
-
     }
   }
   return {

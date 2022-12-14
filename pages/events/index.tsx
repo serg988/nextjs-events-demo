@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import Head from 'next/head'
 import useSWR from 'swr'
 import EventList from '../../components/events/event-list'
 import EventSearch from '../../components/events/events-search'
@@ -51,6 +52,10 @@ export default function AllEventsPage({ dataStat }: Props) {
   }
   return (
     <div>
+      <Head>
+        <title>All Events</title>
+        <meta name='description' content='Find a lot here' />
+      </Head>
       <EventSearch onSearch={findEventsHandler} />
       <EventList items={eventsFetched} />
     </div>

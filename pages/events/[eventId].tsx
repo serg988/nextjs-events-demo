@@ -1,6 +1,7 @@
 import EventContent from '../../components/event-detail/event-content'
 import EventLogistics from '../../components/event-detail/event-logistics'
 import EventSummary from '../../components/event-detail/event-summary'
+import Head from 'next/head'
 import ErrorAlert from '../../components/ui/error-alert'
 import { getEventById, getFeaturedEvents } from '../../helpers/api-util'
 import { Event } from '../../helpers/types'
@@ -20,6 +21,10 @@ export default function EventDetailPage({ event }: Props) {
 
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name='description' content='Find a lot here' />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}

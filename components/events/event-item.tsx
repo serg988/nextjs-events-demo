@@ -3,6 +3,7 @@ import AddressIcon from '../icons/address-icon'
 import ArrowRightIcon from '../icons/arrow-right-icon'
 import DateIcon from '../icons/date-icon'
 import Button from '../ui/button'
+import Image from 'next/image'
 
 import classes from './event-item.module.css'
 
@@ -20,7 +21,7 @@ export default function EventItem({ event }: IEventItem) {
   const exploreLink = `/events/${event.id}`
   return (
     <li className={classes.item}>
-      <img className={classes.img} src={event.image} alt={event.title} />
+      <Image className={classes.img} src={event.image} alt={event.title} width={250} height={160}/>
       <div className={classes.content}>
         <div className={classes.summary}>
           <h2>{event.title}</h2>
